@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DellUserApp</string>
+    <string name="title_activity_passbook">PassbookActivity</string>
+    <string name="title_home">SELL IN</string>
+    <string name="title_dashboard">SELL OUT</string>
+    <string name="title_notifications">REPORTS</string>
+</resources>
