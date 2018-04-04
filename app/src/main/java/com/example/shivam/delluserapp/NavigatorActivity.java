@@ -11,13 +11,21 @@ import android.view.View;
 import android.widget.Button;
 
 public class NavigatorActivity extends AppCompatActivity {
-    Button passbook_button,scan_barcode_button;
+    Button passbook_button,scan_barcode_button,schemes_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigator);
         scan_barcode_button = (Button)findViewById(R.id.scan_barcode_button);
         passbook_button = (Button)findViewById(R.id.passbook_button);
+        schemes_button = (Button)findViewById(R.id.schemes_button);
+        schemes_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NavigatorActivity.this,ShowSchemeActivity.class);
+                startActivity(intent);
+            }
+        });
         scan_barcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

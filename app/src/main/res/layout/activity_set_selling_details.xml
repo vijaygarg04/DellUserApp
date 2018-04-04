@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="2dp"
+    android:layout_height="match_parent"
+    tools:context="com.example.shivam.delluserapp.SetSellingDetailsActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="4">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Service Tag: "
+            android:id="@+id/service_tag_text_view"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Model Number: "
+            android:gravity="center"
+            android:id="@+id/model_number_text_view"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="MSA Name: "
+            android:gravity="center"
+            android:id="@+id/msa_name_text_view"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Bundle Code:"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:id="@+id/bundle_code_text_view"/>
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Store Name"
+        android:id="@+id/store_name_edit_text"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Promoter Name"
+        android:id="@+id/promoter_name_edit_text"/>
+
+    <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1">
+       <Button
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:layout_weight="1"
+           android:gravity="center"
+           android:text="Press to Set date"
+           android:layout_marginRight="4dp"
+           android:background="#ecf0f1"
+           android:textSize="15sp"
+
+           android:textColor="@android:color/black"
+           android:textStyle="bold"
+           android:id="@+id/date_sell_in_button"/>
+       <Button
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:text="Press to SET date"
+           android:background="#ecf0f1"
+           android:id="@+id/set_date_button"
+           android:textStyle="bold"
+           android:layout_marginLeft="4dp"
+           android:textSize="15sp"
+           android:textColor="@android:color/black"
+           android:layout_weight="1"/>
+
+   </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="4dp"
+            android:text="SELL IN"
+            android:id="@+id/add_to_sell_in_button"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:text="SELL OUT"
+            android:id="@+id/add_to_sell_out_button"/>
+    </LinearLayout>
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:id="@+id/submit_button"
+    android:text="SUBMIT"/>
+</LinearLayout>

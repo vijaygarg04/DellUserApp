@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shivam.delluserapp">
-<uses-permission android:name="android.permission.CAMERA"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +29,12 @@
             android:name=".PassbookActivity"
             android:label="@string/title_activity_passbook" />
         <activity android:name=".BarcodeActivity" />
-        <activity android:name=".ScanActivity"></activity>
+        <activity android:name=".ScanActivity" />
+        <activity android:name=".AddProductAsUserActivity" />
+        <activity android:name=".SetSellingDetailsActivity" />
+        <activity android:name=".AddStoreUserData" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ShowSchemeActivity"></activity>
     </application>
 
 </manifest>
