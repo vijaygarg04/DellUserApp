@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.MainProduct;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.R;
@@ -30,7 +31,9 @@ public class SellInFragment extends Fragment {
     List<MainProduct> products;
     TinyDB tinyDB;
     private SellINListener mListener;
+    MaterialDialog materialDialog;
     StoreConfigModel storeConfigModel;
+    Context context;
     List<String> service_tags_list;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -50,6 +53,12 @@ public class SellInFragment extends Fragment {
          view = inflater.inflate(R.layout.fragment_item_sell_in_list, container, false);
         products = new ArrayList<>();
         service_tags_list = new ArrayList<>();
+       materialDialog = new MaterialDialog.Builder(context)
+                .title("Important Information")
+                .content("Please Wait")
+                .progress(true, 0)
+                .progressIndeterminateStyle(true).build();
+        materialDialog.show();
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -88,6 +97,7 @@ public class SellInFragment extends Fragment {
                                        recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
                                    }
                                    recyclerView.setAdapter(new SellInAdapter(products, mListener));
+                                   materialDialog.dismiss();
                                }
                            }
 
@@ -123,6 +133,7 @@ public class SellInFragment extends Fragment {
                     + " must implement OnListFragmentInteractionListener");
         }
         tinyDB = new TinyDB(context);
+        this.context = context;
     }
 
     @Override

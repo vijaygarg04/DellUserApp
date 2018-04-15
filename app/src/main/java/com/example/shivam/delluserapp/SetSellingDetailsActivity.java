@@ -1,5 +1,6 @@
 package com.example.shivam.delluserapp;
 
+import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
         service_tag_text_view.append(mainProduct.getService_tag());
         date_sell_out_Button = (Button) findViewById(R.id.set_date_button);
         simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.US);
+        if(!mainProduct.isStore_sell_in_date_set() || mainProduct.getStore_name().equals(storeConfigModel.getStoreName())){
         if (mainProduct.isStore_sell_out_date_set()){
             date_sell_out_Button.setText(myDateFormatter(mainProduct.getStore_sell_out_date()));
         }
@@ -104,6 +106,8 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
             sell_out.setBackgroundColor(getResources().getColor(R.color.button_color));
             store_name_edit_text.setText(storeConfigModel.getStoreName());
             promoter_name_edit_text.setText(storeConfigModel.getPromoter_name());
+            store_name_edit_text.setEnabled(false);
+            promoter_name_edit_text.setEnabled(false);
         }
         else if(mainProduct.isStore_sell_in_date_set() && !mainProduct.isStore_sell_out_date_set()){
             //Product had already arrived on the store and now can only be sold out
@@ -231,6 +235,26 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
                     }
         }
     });
+
+    }else{
+            Toast.makeText(SetSellingDetailsActivity.this, "This Product is at another store, you can't change its details from this store",Toast.LENGTH_LONG).show();
+            date_sell_in_button.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
+            sell_in.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
+            date_sell_out_Button.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
+            store_name_edit_text.setText(mainProduct.getStore_name());
+            store_name_edit_text.setEnabled(false);
+            promoter_name_edit_text.setEnabled(false);
+            sell_out.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
+            submit_button.setText("RETURN");
+            submit_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+        }
+
     }
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

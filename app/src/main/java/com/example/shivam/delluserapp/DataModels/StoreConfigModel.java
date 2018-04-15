@@ -13,6 +13,7 @@ public class StoreConfigModel {
     public String location_of_store= "default";
     public String date_of_joining = "default";
     public String promoter_name= "default";
+    public String promoter_id = "default";
     public String chat_room= "default";
     public boolean is_logged_in = false;
 
@@ -22,6 +23,14 @@ public class StoreConfigModel {
 
     public void setDate_of_joining(String date_of_joining) {
         this.date_of_joining = date_of_joining;
+    }
+
+    public String getPromoter_id() {
+        return promoter_id;
+    }
+
+    public void setPromoter_id(String promoter_id) {
+        this.promoter_id = promoter_id;
     }
 
     public boolean isIs_logged_in() {

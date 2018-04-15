@@ -1,6 +1,8 @@
 package com.example.shivam.delluserapp;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -19,7 +21,10 @@ public class PassbookActivity extends AppCompatActivity implements SellInFragmen
 //TODO : Show Fragments for Sell In Sell OUT and reports with a filter provided in each of them to sort according to the date.
     private TextView mTextMessage;
     TinyDB tinyDB ;
+    Handler handler;
+    ProgressDialog pd;
     StoreConfigModel storeConfigModel;
+    int progressBarTimer = 0;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,9 +58,31 @@ public class PassbookActivity extends AppCompatActivity implements SellInFragmen
         SellInFragment sellInFragment = new SellInFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame,sellInFragment);
         fragmentTransaction.commit();
+        /*pd =  new ProgressDialog(PassbookActivity.this);
+        pd.setMessage("loading");
+        pd.show();
+        */
+        //handler = new Handler();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+       /* new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(progressBarTimer<100) {
+                    progressBarTimer += 5;
+                    try{
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(progressBarTimer==100){
+                    pd.dismiss();
+                }
+            }
+        }).start();*/
+
     }
 
     @Override

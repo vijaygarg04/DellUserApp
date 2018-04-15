@@ -34,7 +34,10 @@
         <activity android:name=".SetSellingDetailsActivity" />
         <activity android:name=".AddStoreUserData" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ShowSchemeActivity"></activity>
+        <activity android:name=".ShowSchemeActivity" />
+        <activity android:name=".ReportCompetetionActivity" />
+        <activity android:name=".IssuesActivity" />
+        <activity android:name=".AddIssueActivity"></activity>
     </application>
 
 </manifest>

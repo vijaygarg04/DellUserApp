@@ -11,11 +11,27 @@ import android.view.View;
 import android.widget.Button;
 
 public class NavigatorActivity extends AppCompatActivity {
-    Button passbook_button,scan_barcode_button,schemes_button;
+    Button passbook_button,scan_barcode_button,schemes_button, comp_report,issues_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigator);
+        comp_report = (Button)findViewById(R.id.report_competetion_button);
+        issues_button = (Button)findViewById(R.id.issues_button);
+        issues_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NavigatorActivity.this,IssuesActivity.class);
+                startActivity(intent);
+            }
+        });
+        comp_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NavigatorActivity.this,ReportCompetetionActivity.class);
+                startActivity(intent);
+            }
+        });
         scan_barcode_button = (Button)findViewById(R.id.scan_barcode_button);
         passbook_button = (Button)findViewById(R.id.passbook_button);
         schemes_button = (Button)findViewById(R.id.schemes_button);

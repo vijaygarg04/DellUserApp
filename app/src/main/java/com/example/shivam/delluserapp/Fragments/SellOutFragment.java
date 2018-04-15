@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.MainProduct;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.R;
@@ -29,9 +30,11 @@ public class SellOutFragment extends Fragment {
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     View view;
+    MaterialDialog materialDialog;
     private int mColumnCount = 1;
     List<MainProduct> products;
     TinyDB tinyDB ;
+    Context context;
     StoreConfigModel storeConfigModel;
     List<String> service_tags_list;
     private SellOUTListener mListener;
@@ -50,6 +53,12 @@ public class SellOutFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_sell_out_list, container, false);
         products = new ArrayList<>();
         service_tags_list = new ArrayList<>();
+        materialDialog = new MaterialDialog.Builder(context)
+                .title("Important Information")
+                .content("Please Wait")
+                .progress(true, 0)
+                .progressIndeterminateStyle(true).build();
+        materialDialog.show();
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -89,6 +98,7 @@ public class SellOutFragment extends Fragment {
                                     }
                                     recyclerView.setAdapter(new SellOutAdapter(products, mListener));
                                 }
+                                materialDialog.dismiss();
                             }
 
                             @Override
@@ -124,6 +134,7 @@ public class SellOutFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+        this.context = context;
         tinyDB = new TinyDB(context);
     }
 
