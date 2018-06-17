@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+   android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:background="#bdc3c7"
+    android:layout_height="110dp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:id="@+id/text_view_store_id"
+    android:text="STORE ID:- "
+    android:gravity="center_vertical"
+    android:layout_weight="1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Store Name:- "
+        android:id="@+id/text_view_store_name"
+        android:gravity="center_vertical"
+        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Sell In Date: "
+        android:gravity="center_vertical"
+        android:id="@+id/text_view_sell_in_date"
+        android:layout_weight="1"/>
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/display_devices"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Devices" />
+
+    <item
+        android:id="@+id/display_all"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="All Requests" />
+</menu>

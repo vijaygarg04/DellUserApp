@@ -13,6 +13,7 @@ import com.example.shivam.delluserapp.utils.TinyDB;
 
 public class MainActivity extends AppCompatActivity {
 //This is my splash screem
+
     TinyDB tinyDB ;
     ImageView image;
     Handler handler;

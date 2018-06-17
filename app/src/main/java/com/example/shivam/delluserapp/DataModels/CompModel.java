@@ -10,7 +10,10 @@ public class CompModel {
     public String lenovo ;
     public String acer ;
     public String other ;
-    public String storename;
+    public String store_name;
+    public String promoter_id;
+    public String promoter_name;
+    public String store_id;
     public String getAcer() {
         return acer;
     }
@@ -24,15 +27,43 @@ public class CompModel {
     }
 
 
-    public void setStorename(String storename) {
-        this.storename = storename;
-    }
-
     public void setAcer(String acer) {
         this.acer = acer;
     }
 
 
+
+    public String getPromoter_id() {
+        return promoter_id;
+    }
+
+    public void setPromoter_id(String promoter_id) {
+        this.promoter_id = promoter_id;
+    }
+
+    public String getPromoter_name() {
+        return promoter_name;
+    }
+
+    public void setPromoter_name(String promoter_name) {
+        this.promoter_name = promoter_name;
+    }
+
+    public String getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(String store_id) {
+        this.store_id = store_id;
+    }
+
+    public String getStore_name() {
+        return store_name;
+    }
+
+    public void setStore_name(String store_name) {
+        this.store_name = store_name;
+    }
 
     public String getDell() {
         return dell;

@@ -57,9 +57,12 @@ public class ReportCompetetionActivity extends AppCompatActivity {
                     compModel.setOther(others.getText().toString().trim());
                     compModel.setDell(dell.getText().toString().trim());
                     compModel.setHp(hp.getText().toString().trim());
-                    compModel.setStorename(storeConfigModel.getStoreName());
+                    compModel.setStore_id(storeConfigModel.getUnique_store_id());
+                    compModel.setStore_name(storeConfigModel.getStoreName());
+                    compModel.setPromoter_id(storeConfigModel.getPromoter_id());
+                    compModel.setPromoter_name(storeConfigModel.getPromoter_name());
                     String date =  simpleDateFormat.format(new Date()).trim();
-                    databaseReference.child("comp_reporting").child(date).child(storeConfigModel.getStoreName()).setValue(compModel);
+                    databaseReference.child("comp_reporting").child(date).child(storeConfigModel.getUnique_store_id()).setValue(compModel);
                     finish();
                 }
             }

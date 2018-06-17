@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.MainProduct;
@@ -69,7 +70,7 @@ public class SellInFragment extends Fragment {
             }
             recyclerView.setAdapter(new SellInAdapter(products, mListener));
         }
-        databaseReference.child("sell_in").child(storeConfigModel.getStoreName()).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("sell_in").child(storeConfigModel.getUnique_store_id()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                if (dataSnapshot.exists()){
@@ -81,7 +82,6 @@ public class SellInFragment extends Fragment {
                        }
 
                    }
-
                    for (String s : service_tags_list){
                        databaseReference.child("msa").child(s).addListenerForSingleValueEvent(new ValueEventListener() {
                            @Override
@@ -108,6 +108,9 @@ public class SellInFragment extends Fragment {
                        });
 
                    }
+               }else {
+                   materialDialog.dismiss();
+                   Toast.makeText(context,"Data Not Found For This User",Toast.LENGTH_LONG).show();
                }
 
 

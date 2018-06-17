@@ -10,26 +10,46 @@ public class MainProduct {
 public String service_tag = "default";
 //2.)This is the name of the MSA which uploads products. It is uploaded by Admin. It can be empty also.
 public String msa_name = "default";
-//3,4.)This is the name of the store which recieves the product from distributor. It can't be empty.
+//3,4,5.)This is the name of the store which recieves the product from distributor. It can't be empty.
 public boolean store_name_set = false;
+public String store_id= "default";
 public String store_name = "default";
-//5,6.)This is the date when MSA enters the product, i.e. when admin enters the product into the app.
+//6,7.)This is the date when MSA enters the product, i.e. when admin enters the product into the app.
 public boolean msa_date_set = false;
 public String msa_date = "default";
-//7,8.)This is the data when store recieves the product from warehouse or MSA
+//8,9.)This is the data when store recieves the product from warehouse or MSA
 public String store_sell_in_date = "default";
 public boolean store_sell_in_date_set = false;
-//9,10.)This is the date whem the product is sold out from the store to the consumer.
+//10,11.)This is the date whem the product is sold out from the store to the consumer.
 public String store_sell_out_date = "default";
 public boolean store_sell_out_date_set = false;
-//11.)This is the model number of the product, would be set by the admin while entering the product into database.
+//12.)This is the model number of the product, would be set by the admin while entering the product into database.
 public String model_number= "default";
-//12.)Bundle Code
+//13.)Bundle Code
 public String bundle_code= "default";
-//13.)The person who sells the product. To be set in user app.
+//14.)This is (promoter id)
+public String sold_by_promoter_id= "default";
+//15.) this is the promoter's name
 public String sold_by_promoter_name= "default";
+//16,17.) Used for managing display models
 public String display_request_result = "default";
 public boolean display_request = false;
+
+    public String getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(String store_id) {
+        this.store_id = store_id;
+    }
+
+    public String getSold_by_promoter_id() {
+        return sold_by_promoter_id;
+    }
+
+    public void setSold_by_promoter_id(String sold_by_promoter_id) {
+        this.sold_by_promoter_id = sold_by_promoter_id;
+    }
 
     public String getDisplay_request_result() {
         return display_request_result;

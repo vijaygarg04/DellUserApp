@@ -37,7 +37,10 @@
         <activity android:name=".ShowSchemeActivity" />
         <activity android:name=".ReportCompetetionActivity" />
         <activity android:name=".IssuesActivity" />
-        <activity android:name=".AddIssueActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".DisplayActivity" />
+        <activity android:name=".MakeDisplayRequestActivity" />
+        <activity android:name=".ConfirmationAddActivity"></activity>
     </application>
 
 </manifest>

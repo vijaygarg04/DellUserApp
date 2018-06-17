@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="#ecf0f1"
+    tools:context="com.example.shivam.delluserapp.ConfirmationAddActivity">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:textColor="#2980b9"
+    android:layout_marginTop="20dp"
+    android:text="This Product does not exist in the database, you will be rediercted to screen to add it as user.Are you sure?"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="200dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_gravity="end"
+            android:textSize="20sp"
+            android:id="@+id/continue_button"
+            android:textStyle="italic"
+            android:textColor="#ecf0f1"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/holo_green_light"
+            android:text="Continue" />
+
+    </LinearLayout>
+
+</LinearLayout>

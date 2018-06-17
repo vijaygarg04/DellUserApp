@@ -19,7 +19,7 @@ public class chat_model {
     //The text message
     public String message;
     //name of promoter comes here
-    public String seny_by_name;
+    public String sent_by_name;
     //Tells whether sent by admin or not
     public boolean sent_by_admin;
 
@@ -31,12 +31,12 @@ public class chat_model {
         this.message = message;
     }
 
-    public String getSeny_by_name() {
-        return seny_by_name;
+    public String getSent_by_name() {
+        return sent_by_name;
     }
 
-    public void setSeny_by_name(String seny_by_name) {
-        this.seny_by_name = seny_by_name;
+    public void setSent_by_name(String seny_by_name) {
+        this.sent_by_name = seny_by_name;
     }
 
     public boolean isSent_by_admin() {

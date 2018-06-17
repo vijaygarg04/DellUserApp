@@ -104,8 +104,8 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
             //Product has arrived the store for the first time, thus all the details need to be set.
             sell_in.setBackgroundColor(getResources().getColor(R.color.button_color));
             sell_out.setBackgroundColor(getResources().getColor(R.color.button_color));
-            store_name_edit_text.setText(storeConfigModel.getStoreName());
-            promoter_name_edit_text.setText(storeConfigModel.getPromoter_name());
+            store_name_edit_text.setText(storeConfigModel.getStoreName() + "( ID -" +storeConfigModel.getUnique_store_id() + " )");
+            promoter_name_edit_text.setText(storeConfigModel.getPromoter_name()+"( ID -" +storeConfigModel.getPromoter_id() + " )");
             store_name_edit_text.setEnabled(false);
             promoter_name_edit_text.setEnabled(false);
         }
@@ -114,8 +114,12 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
             date_sell_in_button.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
             sell_in.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
             sell_out.setBackgroundColor(getResources().getColor(R.color.button_color));
-            promoter_name_edit_text.setText(mainProduct.getSold_by_promoter_name());
-            store_name_edit_text.setText(mainProduct.getStore_name());
+            //CHANge done here
+            if(!mainProduct.getStore_id().equals(storeConfigModel.getUnique_store_id())){
+                Toast.makeText(SetSellingDetailsActivity.this,"This product exists with another store",Toast.LENGTH_LONG).show();
+            }
+            promoter_name_edit_text.setText(storeConfigModel.getPromoter_name() +"( ID -" +storeConfigModel.getPromoter_id() + " )");
+            store_name_edit_text.setText(mainProduct.getStore_name()+"( ID -" +mainProduct.getStore_id() + " )");
             store_name_edit_text.setEnabled(false);
             promoter_name_edit_text.setEnabled(false);
             can_sell_in_data_manipulated = false;
@@ -125,8 +129,8 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
             sell_out.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
             can_sell_in_data_manipulated = false;
             can_sell_out_data_manipulated = false;
-            promoter_name_edit_text.setText(mainProduct.getSold_by_promoter_name());
-            store_name_edit_text.setText(mainProduct.getStore_name());
+            promoter_name_edit_text.setText(mainProduct.getSold_by_promoter_name() +"( ID -" +mainProduct.getSold_by_promoter_id() + " )");
+            store_name_edit_text.setText(mainProduct.getStore_name()+"( ID -" +mainProduct.getStore_id() + " )");
             promoter_name_edit_text.setEnabled(false);
             store_name_edit_text.setEnabled(false);
             date_sell_out_Button.setBackgroundColor(getResources().getColor(R.color.inactive_button_color));
@@ -166,39 +170,47 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
 
                     if (can_sell_out_data_manipulated)
                     {
-                        if (is_sell_in_pressed && is_sell_out_pressed && promoter_name_edit_text.getText().toString().trim().length()>0 &&
-                                store_name_edit_text.getText().toString().trim().length()>0 &&
-                                sell_in_date_set && sell_out_date_set){
+                        if (is_sell_in_pressed && is_sell_out_pressed
+                                //&& promoter_name_edit_text.getText().toString().trim().length()>0
+                                //&& store_name_edit_text.getText().toString().trim().length()>0
+                                && sell_in_date_set && sell_out_date_set){
                             mainProduct.setStore_sell_in_date_set(true);
                             mainProduct.setStore_sell_in_date(sell_in_date);
-                            mainProduct.setSold_by_promoter_name(promoter_name_edit_text.getText().toString().trim());
-                            mainProduct.setStore_name(store_name_edit_text.getText().toString().trim());
+                            mainProduct.setSold_by_promoter_name(storeConfigModel.getPromoter_name());
+                            mainProduct.setStore_id(storeConfigModel.getUnique_store_id());
+                            mainProduct.setStore_name(storeConfigModel.getStoreName());
                             mainProduct.setStore_name_set(true);
                             mainProduct.setStore_sell_out_date_set(true);
                             mainProduct.setStore_sell_out_date(sell_out_date);
+                            mainProduct.setDisplay_request_result("sold_out");
+                            databaseReference.child("display_request")
+                                    .child(mainProduct.getService_tag())
+                                    .child("is_sold_out").setValue(true);
                             databaseReference.child("sell_in")
-                                    .child(mainProduct.getStore_name())
+                                    .child(storeConfigModel.getUnique_store_id())
                                     .child(sell_in_date)
                                     .child(mainProduct.getService_tag())
                                     .setValue(mainProduct.getModel_number());
                             databaseReference.child("sell_out")
-                                    .child(mainProduct.getStore_name())
+                                    .child(mainProduct.getStore_id())
                                     .child(sell_out_date)
                                     .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getSold_by_promoter_name());
+                                    .setValue(mainProduct.getSold_by_promoter_id());
                             databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct);
                             Toast.makeText(SetSellingDetailsActivity.this,"Data Successfully Updated",Toast.LENGTH_LONG).show();
                             finish();
                         }
-                        else if (is_sell_in_pressed && !is_sell_out_pressed && promoter_name_edit_text.getText().toString().trim().length()>0 &&
-                            store_name_edit_text.getText().toString().trim().length()>0 && sell_in_date_set){
+                        else if (is_sell_in_pressed && !is_sell_out_pressed
+                                //&& promoter_name_edit_text.getText().toString().trim().length()>0
+                                //&& store_name_edit_text.getText().toString().trim().length()>0
+                                && sell_in_date_set){
                             mainProduct.setStore_sell_in_date_set(true);
                             mainProduct.setStore_sell_in_date(sell_in_date);
-                            mainProduct.setSold_by_promoter_name(promoter_name_edit_text.getText().toString().trim());
-                            mainProduct.setStore_name(store_name_edit_text.getText().toString().trim());
+                            mainProduct.setStore_name(storeConfigModel.getStoreName());
                             mainProduct.setStore_name_set(true);
+                            mainProduct.setStore_id(storeConfigModel.getUnique_store_id());
                             databaseReference.child("sell_in")
-                                    .child(mainProduct.getStore_name())
+                                    .child(storeConfigModel.getUnique_store_id())
                                     .child(sell_in_date)
                                     .child(mainProduct.getService_tag())
                                     .setValue(mainProduct.getModel_number());
@@ -209,12 +221,17 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
                         else if (is_sell_out_pressed && !is_sell_in_pressed && !can_sell_in_data_manipulated && sell_out_date_set){
                             mainProduct.setStore_sell_out_date_set(true);
                             mainProduct.setStore_sell_out_date(sell_out_date);
+                            mainProduct.setSold_by_promoter_name(storeConfigModel.getPromoter_name());
+                            mainProduct.setSold_by_promoter_id(storeConfigModel.getPromoter_id());
                             databaseReference.child("sell_out")
-                                    .child(mainProduct.getStore_name())
+                                    .child(mainProduct.getStore_id())
                                     .child(sell_out_date)
                                     .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getSold_by_promoter_name());
-
+                                    .setValue(mainProduct.getSold_by_promoter_id());
+                            mainProduct.setDisplay_request_result("sold_out");
+                            databaseReference.child("display_request")
+                                    .child(mainProduct.getService_tag())
+                                    .child("is_sold_out").setValue(true);
                             databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct);
                             Toast.makeText(SetSellingDetailsActivity.this,"Data Successfully Updated",Toast.LENGTH_LONG).show();
                             finish();

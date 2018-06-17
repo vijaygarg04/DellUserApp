@@ -32,10 +32,10 @@ public class SellOutAdapter extends RecyclerView.Adapter<SellOutAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.model_number.append(mValues.get(position).getModel_number());
-        holder.service_tag.append(mValues.get(position).getService_tag());
-        holder.sell_in_date.append(myDateFormatter(mValues.get(position).getStore_sell_in_date()));
-        holder.sell_out_date.append(myDateFormatter(mValues.get(position).getStore_sell_out_date()));
+        holder.model_number.setText("Model Number: "+mValues.get(position).getModel_number());
+        holder.service_tag.setText("Service Tag: "+mValues.get(position).getService_tag());
+        holder.sell_in_date.setText("IN: "+myDateFormatter(mValues.get(position).getStore_sell_in_date()));
+        holder.sell_out_date.setText("OUT: "+myDateFormatter(mValues.get(position).getStore_sell_out_date()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

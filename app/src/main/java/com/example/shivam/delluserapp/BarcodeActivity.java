@@ -3,6 +3,7 @@ package com.example.shivam.delluserapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -64,8 +65,9 @@ public class BarcodeActivity extends AppCompatActivity {
                             }
                             else
                           {
-                              Toast.makeText(BarcodeActivity.this,"DATA doesn't exist in firebase",Toast.LENGTH_LONG).show();
-                              Intent intent1 = new Intent(BarcodeActivity.this,AddProductAsUserActivity.class);
+
+                              Toast.makeText(BarcodeActivity.this,"Data doesn't exist in Database",Toast.LENGTH_LONG).show();
+                              Intent intent1 = new Intent(BarcodeActivity.this,ConfirmationAddActivity.class);
                               intent1.putExtra("service_tag",service_tag);
                               startActivity(intent1);
                           }
@@ -87,6 +89,7 @@ public class BarcodeActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(BarcodeActivity.this, Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED){
                     Intent intent = new Intent(BarcodeActivity.this,ScanActivity.class);
+                    intent.putExtra("activity_name","barcode");
                     startActivity(intent);
                 }
                 else {

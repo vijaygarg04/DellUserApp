@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="115dp"
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="MODEL NUMBER:"
+                android:gravity="center"
+                android:id="@+id/model_number_display_all"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:id="@+id/service_tag_display_all"
+                android:textStyle="bold"
+                android:text="SERVICE TAG:"
+                android:textColor="@android:color/black"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/sell_in_date_display_all"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/black"
+
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

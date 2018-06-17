@@ -39,21 +39,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 apply plugin: 'com.google.gms.google-services'

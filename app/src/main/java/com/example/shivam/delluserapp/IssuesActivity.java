@@ -47,7 +47,7 @@ public class IssuesActivity extends AppCompatActivity implements ChatFragment.On
                     chat_model c = new chat_model();
                     c.setMessage(editText.getText().toString());
                     c.setSent_by_admin(false);
-                    c.setSeny_by_name(s.getPromoter_id());
+                    c.setSent_by_name(s.getPromoter_id());
                     c.setSent_by_id(s.getPromoter_id());
                     databaseReference.child("chat_room").push().setValue(c);
                     editText.setText("");
@@ -60,5 +60,6 @@ public class IssuesActivity extends AppCompatActivity implements ChatFragment.On
     @Override
     public void onListFragmentInteraction(chat_model item) {
         Toast.makeText(IssuesActivity.this,item.getMessage(),Toast.LENGTH_LONG).show();
+
     }
 }

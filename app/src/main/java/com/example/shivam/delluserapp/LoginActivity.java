@@ -55,18 +55,19 @@ public class LoginActivity extends AppCompatActivity {
                             if (dataSnapshot.exists() && dataSnapshot.getValue()!=null) {
                                 if (dataSnapshot.child("is_active").getValue(Boolean.class)) {
                                     Log.e("1","1");
-                                if (pass_text.equals(dataSnapshot.child("pasword").getValue(String.class))) {
+                                if (pass_text.equals(dataSnapshot.child("password").getValue(String.class))) {
                                     if (!dataSnapshot.child("logged_in").getValue(Boolean.class)) {
                                         databaseReference.child("promoterinfo").child(email_text).child("logged_in").setValue(true);
                                         Log.e("2","2");
                                     }
 
                                     StoreConfigModel storeConfigModel = new StoreConfigModel();
-                                    storeConfigModel.setPromoter_name(dataSnapshot.child("name").getValue(String.class));
-                                    storeConfigModel.setMobile_number(dataSnapshot.child("contact").getValue(String.class));
-                                    storeConfigModel.setPromoter_id(dataSnapshot.child("id").getValue(String.class));
-                                    storeConfigModel.setDate_of_joining(dataSnapshot.child("date").getValue(String.class));
-                                    storeConfigModel.setStoreName(dataSnapshot.child("store").getValue(String.class));
+                                    storeConfigModel.setPromoter_name(dataSnapshot.child("promoter_name").getValue(String.class));
+                                    storeConfigModel.setMobile_number(dataSnapshot.child("promoter_contact").getValue(String.class));
+                                    storeConfigModel.setPromoter_id(dataSnapshot.child("promoter_id").getValue(String.class));
+                                    storeConfigModel.setDate_of_joining(dataSnapshot.child("date_of_joining").getValue(String.class));
+                                    storeConfigModel.setStoreName(dataSnapshot.child("store_name").getValue(String.class));
+                                    storeConfigModel.setUnique_store_id(dataSnapshot.child("store_id").getValue(String.class));
                                     storeConfigModel.setIs_logged_in(true);
                                     tinyDB.putObject(StaticConstants.config_object_key, storeConfigModel);
                                     tinyDB.putBoolean(StaticConstants.is_config_object_created, true);

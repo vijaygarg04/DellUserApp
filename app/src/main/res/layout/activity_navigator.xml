@@ -2,57 +2,138 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_margin="20dp"
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context="com.example.shivam.delluserapp.NavigatorActivity">
-    <Button
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="0.7"
+      android:orientation="horizontal">
+      <LinearLayout
+          android:layout_width="0dp"
+          android:orientation="vertical"
+          android:layout_height="match_parent"
+          android:layout_weight="2.8">
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:textStyle="bold"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              android:gravity="center_vertical"
+              android:id="@+id/name_navigator_text"
+              android:layout_weight="1" />
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:textStyle="bold"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              android:gravity="center_vertical"
+              android:id="@+id/id_navigator_text"
+              android:layout_weight="1" />
+      </LinearLayout>
+      <Button
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:text="LOGOUT"
+          android:id="@+id/logout_btn_navigator"
+          android:background="#e74c3c"
+          android:layout_height="match_parent" />
+  </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/passbook_button"
-        android:background="@android:color/holo_blue_light"
-        android:text="PASSBOOK"
-        android:layout_margin="10dp"
-        android:layout_weight="1"/>
-    <Button
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:background="@android:color/holo_blue_light"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/display_devices_button"
-        android:text="DISPLAY DEVICES"
-        android:layout_margin="10dp"
-        android:layout_weight="1"/>
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/passbook_button"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="PASSBOOK"
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/search_button"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_light"
+            android:text="Search Product" />
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_marginTop="10dp"
+    android:layout_weight="1">
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:background="@android:color/holo_blue_light"
         android:id="@+id/schemes_button"
         android:text="SCHEMES"
-        android:layout_weight="1"/>
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        />
     <Button
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/issues_button"
-        android:background="@android:color/holo_blue_light"
-        android:text="ISSUES"
-        android:layout_weight="1"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-       android:layout_margin="10dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp"
         android:background="@android:color/holo_blue_light"
         android:id="@+id/report_competetion_button"
-        android:text="REPORT COMPETETION"
-        android:layout_weight="1"/>
-    <Button
+        android:text="REPORT COMPETETION" />
+
+
+</LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@android:color/holo_orange_dark"
-        android:id="@+id/scan_barcode_button"
-        android:text="SCAN BARCODE"
-        android:layout_weight="1"/>
+        android:layout_marginTop="10dp"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/issues_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="ISSUES" />
+
+        <Button
+            android:id="@+id/display_devices_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_blue_light"
+            android:text="DISPLAY DEVICES" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/scan_barcode_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/holo_orange_dark"
+            android:text="SCAN BARCODE" />
+    </LinearLayout>
+
 </LinearLayout>
