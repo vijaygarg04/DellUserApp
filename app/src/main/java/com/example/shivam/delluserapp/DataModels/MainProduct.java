@@ -34,6 +34,26 @@ public String sold_by_promoter_name= "default";
 //16,17.) Used for managing display models
 public String display_request_result = "default";
 public boolean display_request = false;
+//18.) This is Configuration
+public String configuration = "default";
+
+    public MainProduct(String service_tag, String msa_name, boolean msa_date_set, String msa_date, String model_number, String bundle_code, String configuration) {
+        this.service_tag = service_tag;
+        this.msa_name = msa_name;
+        this.msa_date_set = msa_date_set;
+        this.msa_date = msa_date;
+        this.model_number = model_number;
+        this.bundle_code = bundle_code;
+        this.configuration = configuration;
+    }
+
+    public String getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(String configuration) {
+        this.configuration = configuration;
+    }
 
     public String getStore_id() {
         return store_id;
@@ -173,9 +193,10 @@ public boolean display_request = false;
 
     public MainProduct() {
         //For firebase
+
     }
 
-    public MainProduct(String service_tag, String msa_name, boolean store_name_set, String store_name, boolean msa_date_set, String msa_date, String store_sell_in_date, boolean store_sell_in_date_set, String store_sell_out_date, boolean store_sell_out_date_set, String model_number, String bundle_code, String sold_by_promoter_name) {
+    public MainProduct(String service_tag, String msa_name, boolean store_name_set, String store_name, boolean msa_date_set, String msa_date, String store_sell_in_date, boolean store_sell_in_date_set, String store_sell_out_date, boolean store_sell_out_date_set, String model_number, String bundle_code, String sold_by_promoter_name,String configuration) {
         this.service_tag = service_tag;
         this.msa_name = msa_name;
         this.store_name_set = store_name_set;
@@ -189,6 +210,7 @@ public boolean display_request = false;
         this.model_number = model_number;
         this.bundle_code = bundle_code;
         this.sold_by_promoter_name = sold_by_promoter_name;
+        this.configuration = configuration;
     }
     //TODO : Modify this product object according to the data required.
 }

@@ -14,11 +14,13 @@ import java.util.List;
  */
 
 public class SearchResultViewHolder  extends RecyclerView.ViewHolder{
-    public List<MainProduct> taskObj;
+
     TextView store_name_text_view,store_id_text_view,sell_in_date_text_view;
+    public final View mView;
     public SearchResultViewHolder(final View itemView,List<MainProduct> mainProducts) {
         super(itemView);
-        this.taskObj=mainProducts;
+        mView  = itemView;
+
         store_name_text_view = (TextView)itemView.findViewById(R.id.text_view_store_name);
         store_id_text_view = (TextView)itemView.findViewById(R.id.text_view_store_id);
         sell_in_date_text_view =(TextView)itemView.findViewById(R.id.text_view_sell_in_date);

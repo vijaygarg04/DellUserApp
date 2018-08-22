@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.DataModels.chat_model;
 import com.example.shivam.delluserapp.Fragments.ChatFragment;

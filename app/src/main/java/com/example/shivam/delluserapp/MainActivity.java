@@ -7,33 +7,36 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.utils.StaticConstants;
 import com.example.shivam.delluserapp.utils.TinyDB;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 //This is my splash screem
-
-    TinyDB tinyDB ;
-    ImageView image;
     Handler handler;
     ProgressBar progressBar;
-    boolean b;
     int progressBarTimer = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-        tinyDB = new TinyDB(MainActivity.this);
         progressBar = (ProgressBar)findViewById(R.id.progress);
-         b = tinyDB.getBoolean(StaticConstants.is_config_object_created);
-         handler=new Handler();
+        handler=new Handler();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while(progressBarTimer<100){
-                    progressBarTimer+=5;
+
+                        progressBarTimer+=5;
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -41,18 +44,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     try{
-                        Thread.sleep(100);
+                        Thread.sleep(70);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
 
-                if(progressBarTimer==100 && b){
-                    Intent intent = new Intent(MainActivity.this,NavigatorActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else if (progressBarTimer==100 && !b){
+               if (progressBarTimer==100 ){
+
                     Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                     startActivity(intent);
                     finish();

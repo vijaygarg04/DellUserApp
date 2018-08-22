@@ -1,6 +1,7 @@
 package com.example.shivam.delluserapp.Fragments;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class SellInAdapter extends RecyclerView.Adapter<SellInAdapter.ViewHolder
         holder.model_number.setText("Model Number: "+mValues.get(position).getModel_number());
         holder.service_tag.setText("Service Tag: "+mValues.get(position).getService_tag());
         holder.sell_in_date.setText("IN: "+myDateFormatter(mValues.get(position).getStore_sell_in_date()));
+        Log.e("Critical : ",mValues.get(position).getStore_sell_in_date());
         if (!mValues.get(position).isStore_sell_out_date_set()){
             holder.sell_out_date.setText("OUT: Pending");
         }
@@ -81,9 +83,10 @@ public class SellInAdapter extends RecyclerView.Adapter<SellInAdapter.ViewHolder
         }
     }
     public String myDateFormatter(String date){
-
-        String a = date.substring(0,2) +"/" +date.substring(2,4) + "/"+ date.substring(4,8);
-
+        String a = date;
+        if (date.length()>5) {
+             a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
+        }
         return a;
     }
 }

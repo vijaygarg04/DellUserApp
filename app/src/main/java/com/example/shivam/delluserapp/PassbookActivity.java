@@ -1,6 +1,7 @@
 package com.example.shivam.delluserapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ public class PassbookActivity extends AppCompatActivity implements SellInFragmen
     private TextView mTextMessage;
     TinyDB tinyDB ;
     StoreConfigModel storeConfigModel;
+    String date_input;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -51,6 +53,9 @@ public class PassbookActivity extends AppCompatActivity implements SellInFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passbook);
         tinyDB = new TinyDB(PassbookActivity.this);
+        Intent intent = getIntent();
+        date_input = intent.getStringExtra("date");
+        tinyDB.putString("date_string",date_input);
         storeConfigModel = tinyDB.getObject(StaticConstants.config_object_key, StoreConfigModel.class);
         SellInFragment sellInFragment = new SellInFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame,sellInFragment);
@@ -62,12 +67,19 @@ public class PassbookActivity extends AppCompatActivity implements SellInFragmen
 
     @Override
     public void onListFragmentInteraction(MainProduct item) {
+        Intent intent = new Intent(PassbookActivity.this,ShowInformationActivity.class);
+        intent.putExtra("service_tag",item.getService_tag());
+        startActivity(intent);
 
 
     }
 
     @Override
     public void sellOUTInteraction(MainProduct item) {
+
+        Intent intent = new Intent(PassbookActivity.this,ShowInformationActivity.class);
+        intent.putExtra("service_tag",item.getService_tag());
+        startActivity(intent);
 
     }
 

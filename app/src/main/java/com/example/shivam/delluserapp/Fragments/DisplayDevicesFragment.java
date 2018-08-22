@@ -62,41 +62,64 @@ public class DisplayDevicesFragment extends Fragment {
                 .progress(true, 0)
                 .progressIndeterminateStyle(true).build();
         materialDialog.show();
-       databaseReference.child("display_request").addListenerForSingleValueEvent(new ValueEventListener() {
+       databaseReference.child("display_request").child(s.getUnique_store_id()).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
-                    DisplayModel dm = ds.getValue(DisplayModel.class);
-                    // Shows only devices which are not sold out and whose requests for display had been accepted
-                    // in Short, shows devices currently in display of the store.
-                    if (s.getUnique_store_id().equals(dm.getStore_id())
-                            && !dm.isIs_sold_out()
-                            && dm.getRequest_result().equals("accept")){
-                        displayModels.add(dm);
-                    }
 
-                }
-                materialDialog.dismiss();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        DisplayModel dm = ds.getValue(DisplayModel.class);
+                        // Shows only devices which are not sold out and whose requests for display had been accepted
+                        // in Short, shows devices currently in display of the store.
+                        if (!dm.isIs_sold_out() && dm.getRequest_result().equals("accept")) {
+                            displayModels.add(dm);
+                        }
+
+                    }
+                    materialDialog.dismiss();
+
                 if (displayModels.size()==0){
-                    Toast.makeText(context,"No Data Found for this user",Toast.LENGTH_LONG).show();
-                }
-                if (view instanceof RecyclerView) {
-                    Context context = view.getContext();
-                    RecyclerView recyclerView = (RecyclerView) view;
-                    if (mColumnCount <= 1) {
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    } else {
-                        recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-                    }
-                    recyclerView.setAdapter(new DisplayDeviceAdapter(displayModels, mListener));
+                    new MaterialDialog.Builder(context)
+                            .title("INFORMATION")
+                            .content("NO Display Device Found....")
+                            .positiveText("OK")
+                            .show();
+
+//                    Toast.makeText(context,"No Data Found for this user",Toast.LENGTH_LONG).show();
                 }
 
+                    if (view instanceof RecyclerView) {
+                        Context context = view.getContext();
+                        RecyclerView recyclerView = (RecyclerView) view;
+                        if (mColumnCount <= 1) {
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        } else {
+                            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                        }
+                        recyclerView.setAdapter(new DisplayDeviceAdapter(displayModels, mListener));
+                    }
+                }else {
+
+                    materialDialog.dismiss();
+                    new MaterialDialog.Builder(context)
+                            .title("INFORMATION")
+                            .content("NO Display Data Found....")
+                            .positiveText("OK")
+                            .show();
+
+//                    Toast.makeText(context,"NO DATA FOUND",Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("Error : ", databaseError.getMessage()+"");
+                new MaterialDialog.Builder(context)
+                        .title("INFORMATION")
+                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                        .positiveText("OK")
+                        .show();
             }
         });
         return view;

@@ -19,4 +19,5 @@
         completions."
     </string>
     <string name="password_error">Password incorrect</string>
+    <string name="date_picker">Select A Date</string>
 </resources>

@@ -32,8 +32,8 @@ public class AllDisplayAdapter extends RecyclerView.Adapter<AllDisplayAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.model_number.setText(mValues.get(position).getModel_number());
-        holder.service_tag.setText(mValues.get(position).getService_tag());
+        holder.model_number.setText("Model No.: "+mValues.get(position).getModel_number());
+        holder.service_tag.setText("Service Tag: "+mValues.get(position).getService_tag());
         holder.sell_in_date.setText("Result : " + holder.mItem.getRequest_result());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

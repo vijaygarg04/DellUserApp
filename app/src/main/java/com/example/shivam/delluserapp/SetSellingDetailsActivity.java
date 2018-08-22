@@ -1,6 +1,7 @@
 package com.example.shivam.delluserapp;
 
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.shivam.delluserapp.DataModels.DisplayModel;
 import com.example.shivam.delluserapp.DataModels.MainProduct;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.utils.StaticConstants;
 import com.example.shivam.delluserapp.utils.TinyDB;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tsongkha.spinnerdatepicker.DatePicker;
@@ -32,6 +38,7 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
     MainProduct mainProduct;
     Button date_sell_out_Button,sell_in,sell_out,submit_button,date_sell_in_button;
     FirebaseDatabase firebaseDatabase;
+    MaterialDialog materialDialog;
     String sell_in_date,sell_out_date;
     DatabaseReference databaseReference;
     SimpleDateFormat simpleDateFormat;
@@ -67,7 +74,7 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
         msa_name_text_view.append(mainProduct.getMsa_name());
         service_tag_text_view.append(mainProduct.getService_tag());
         date_sell_out_Button = (Button) findViewById(R.id.set_date_button);
-        simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.US);
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         if(!mainProduct.isStore_sell_in_date_set() || mainProduct.getStore_name().equals(storeConfigModel.getStoreName())){
         if (mainProduct.isStore_sell_out_date_set()){
             date_sell_out_Button.setText(myDateFormatter(mainProduct.getStore_sell_out_date()));
@@ -167,12 +174,15 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
     submit_button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            materialDialog = new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                    .title("Updating Data")
+                    .content("Please Don't Press Back..")
+                    .canceledOnTouchOutside(false)
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(true).build();
                     if (can_sell_out_data_manipulated)
                     {
                         if (is_sell_in_pressed && is_sell_out_pressed
-                                //&& promoter_name_edit_text.getText().toString().trim().length()>0
-                                //&& store_name_edit_text.getText().toString().trim().length()>0
                                 && sell_in_date_set && sell_out_date_set){
                             mainProduct.setStore_sell_in_date_set(true);
                             mainProduct.setStore_sell_in_date(sell_in_date);
@@ -183,58 +193,302 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
                             mainProduct.setStore_sell_out_date_set(true);
                             mainProduct.setStore_sell_out_date(sell_out_date);
                             mainProduct.setDisplay_request_result("sold_out");
-                            databaseReference.child("display_request")
-                                    .child(mainProduct.getService_tag())
-                                    .child("is_sold_out").setValue(true);
-                            databaseReference.child("sell_in")
-                                    .child(storeConfigModel.getUnique_store_id())
-                                    .child(sell_in_date)
-                                    .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getModel_number());
-                            databaseReference.child("sell_out")
-                                    .child(mainProduct.getStore_id())
-                                    .child(sell_out_date)
-                                    .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getSold_by_promoter_id());
-                            databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct);
-                            Toast.makeText(SetSellingDetailsActivity.this,"Data Successfully Updated",Toast.LENGTH_LONG).show();
-                            finish();
+
+                            if (mainProduct.getDisplay_request_result().equals("accept"))
+                            {
+                                mainProduct.setDisplay_request_result("sold_out_display");
+                                materialDialog.show();
+                                databaseReference.child("display_request")
+                                        .child(storeConfigModel.getUnique_store_id())
+                                        .child(mainProduct.getService_tag())
+                                        .child("is_sold_out").setValue(true, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                        databaseReference.child("sell_in")
+                                                .child(storeConfigModel.getUnique_store_id())
+                                                .child(sell_in_date)
+                                                .child(mainProduct.getService_tag())
+                                                .setValue(mainProduct.getModel_number(), new DatabaseReference.CompletionListener() {
+                                                    @Override
+                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                        databaseReference.child("sell_out")
+                                                                .child(mainProduct.getStore_id())
+                                                                .child(sell_out_date)
+                                                                .child(mainProduct.getService_tag())
+                                                                .setValue(mainProduct.getSold_by_promoter_id(), new DatabaseReference.CompletionListener() {
+                                                                    @Override
+                                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                        databaseReference
+                                                                                .child("msa")
+                                                                                .child(mainProduct.getService_tag())
+                                                                                .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                                                    @Override
+                                                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                                        materialDialog.dismiss();
+                                                                                        new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                                                .title("Information")
+                                                                                                .content("Data Updated")
+                                                                                                .positiveText("Ok")
+                                                                                                .canceledOnTouchOutside(false)
+                                                                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                                                    @Override
+                                                                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                                        finish();
+                                                                                                    }
+                                                                                                }).show();
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+
+                                    }
+                                });
+                            }
+                            else{
+                                materialDialog.show();
+                                databaseReference.child("sell_in")
+                                        .child(storeConfigModel.getUnique_store_id())
+                                        .child(sell_in_date)
+                                        .child(mainProduct.getService_tag())
+                                        .setValue(mainProduct.getModel_number(), new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                databaseReference.child("sell_out")
+                                                        .child(mainProduct.getStore_id())
+                                                        .child(sell_out_date)
+                                                        .child(mainProduct.getService_tag())
+                                                        .setValue(mainProduct.getSold_by_promoter_id(), new DatabaseReference.CompletionListener() {
+                                                            @Override
+                                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                                    @Override
+                                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                        materialDialog.dismiss();
+                                                                        new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                                .title("Information")
+                                                                                .content("Data Updated")
+                                                                                .positiveText("Ok")
+                                                                                .canceledOnTouchOutside(false)
+                                                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                                    @Override
+                                                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                        finish();
+                                                                                    }
+                                                                                }).show();
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                            }
+                                        });
+
+                            }
+
                         }
                         else if (is_sell_in_pressed && !is_sell_out_pressed
-                                //&& promoter_name_edit_text.getText().toString().trim().length()>0
-                                //&& store_name_edit_text.getText().toString().trim().length()>0
                                 && sell_in_date_set){
                             mainProduct.setStore_sell_in_date_set(true);
                             mainProduct.setStore_sell_in_date(sell_in_date);
                             mainProduct.setStore_name(storeConfigModel.getStoreName());
                             mainProduct.setStore_name_set(true);
                             mainProduct.setStore_id(storeConfigModel.getUnique_store_id());
-                            databaseReference.child("sell_in")
-                                    .child(storeConfigModel.getUnique_store_id())
-                                    .child(sell_in_date)
-                                    .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getModel_number());
-                            databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct);
-                            Toast.makeText(SetSellingDetailsActivity.this,"Data Successfully Updated",Toast.LENGTH_LONG).show();
-                            finish();
+                            //Dialog TO Ask For Display Details, which makes this device non - transferrable to any other ISP
+                            new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                    .title("Please Answer")
+                                    .content("Is This Product Already Present In Display At Your Store ? ")
+                                    .canceledOnTouchOutside(false)
+                                    .positiveText("Yes")
+                                    .negativeText("No")
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            materialDialog.show();
+                                            //Update Display Data Along With Rest Of Data
+                                            mainProduct.setDisplay_request(false);
+                                            mainProduct.setDisplay_request_result("accept");
+
+
+                                            databaseReference.child("sell_in")
+                                                    .child(storeConfigModel.getUnique_store_id())
+                                                    .child(sell_in_date)
+                                                    .child(mainProduct.getService_tag())
+                                                    .setValue(mainProduct.getModel_number(), new DatabaseReference.CompletionListener() {
+                                                        @Override
+                                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                            databaseReference
+                                                                    .child("msa")
+                                                                    .child(mainProduct.getService_tag())
+                                                                    .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                                        @Override
+                                                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                            DisplayModel dm = new DisplayModel();
+                                                                            dm.setStore_name(mainProduct.getStore_name());
+                                                                            dm.setStore_id(mainProduct.getStore_id());
+                                                                            dm.setRequest_result("accept");
+                                                                            dm.setRequest_status(false);
+                                                                            dm.setModel_number(mainProduct.getModel_number());
+                                                                            dm.setIs_sold_out(false);
+                                                                            dm.setService_tag(mainProduct.getService_tag());
+
+                                                                            databaseReference
+                                                                                    .child("display_request")
+                                                                                    .child(mainProduct.getStore_id())
+                                                                                    .child(mainProduct.getService_tag())
+                                                                                    .setValue(dm, new DatabaseReference.CompletionListener() {
+                                                                                        @Override
+                                                                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                                            materialDialog.dismiss();
+                                                                                            new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                                                    .title("Information")
+                                                                                                    .content("Data Updated")
+                                                                                                    .positiveText("Ok")
+                                                                                                    .canceledOnTouchOutside(false)
+                                                                                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                                                        @Override
+                                                                                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                                            finish();
+                                                                                                        }
+                                                                                                    }).show();
+                                                                                        }
+                                                                                    });
+                                                                        }
+                                                                    });
+
+                                                        }
+                                                    });
+
+                                        }
+                                    }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        //Update Only The Necessary Data
+                                        materialDialog.show();
+                                    databaseReference.child("sell_in")
+                                            .child(storeConfigModel.getUnique_store_id())
+                                            .child(sell_in_date)
+                                            .child(mainProduct.getService_tag())
+                                            .setValue(mainProduct.getModel_number(), new DatabaseReference.CompletionListener() {
+                                                @Override
+                                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                    databaseReference
+                                                            .child("msa")
+                                                            .child(mainProduct.getService_tag())
+                                                            .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                                @Override
+                                                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+
+                                                                    materialDialog.dismiss();
+                                                                    new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                            .title("Information")
+                                                                            .content("Data Updated")
+                                                                            .positiveText("Ok")
+                                                                            .canceledOnTouchOutside(false)
+                                                                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                                @Override
+                                                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                    finish();
+                                                                                }
+                                                                            }).show();
+
+                                                                }
+                                                            });
+                                                }
+                                            });
+
+                                }
+                            }).show();
+
+
+
+
                         }
                         else if (is_sell_out_pressed && !is_sell_in_pressed && !can_sell_in_data_manipulated && sell_out_date_set){
+                            //Already Sold In, Can Only Be Sold Out
                             mainProduct.setStore_sell_out_date_set(true);
                             mainProduct.setStore_sell_out_date(sell_out_date);
                             mainProduct.setSold_by_promoter_name(storeConfigModel.getPromoter_name());
                             mainProduct.setSold_by_promoter_id(storeConfigModel.getPromoter_id());
-                            databaseReference.child("sell_out")
-                                    .child(mainProduct.getStore_id())
-                                    .child(sell_out_date)
-                                    .child(mainProduct.getService_tag())
-                                    .setValue(mainProduct.getSold_by_promoter_id());
-                            mainProduct.setDisplay_request_result("sold_out");
-                            databaseReference.child("display_request")
-                                    .child(mainProduct.getService_tag())
-                                    .child("is_sold_out").setValue(true);
-                            databaseReference.child("msa").child(mainProduct.getService_tag()).setValue(mainProduct);
-                            Toast.makeText(SetSellingDetailsActivity.this,"Data Successfully Updated",Toast.LENGTH_LONG).show();
-                            finish();
+                           // mainProduct.setDisplay_request_result("sold_out");
+                            materialDialog.show();
+                            if (mainProduct.getDisplay_request_result().equals("accept"))
+                            {
+                                mainProduct.setDisplay_request_result("sold_out_display");
+                                databaseReference.child("display_request")
+                                        .child(storeConfigModel.getUnique_store_id())
+                                        .child(mainProduct.getService_tag())
+                                        .child("is_sold_out").setValue(true, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                        databaseReference.child("sell_out")
+                                                .child(mainProduct.getStore_id())
+                                                .child(sell_out_date)
+                                                .child(mainProduct.getService_tag())
+                                                .setValue(mainProduct.getSold_by_promoter_id(), new DatabaseReference.CompletionListener() {
+                                                    @Override
+                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                        databaseReference
+                                                                .child("msa")
+                                                                .child(mainProduct.getService_tag())
+                                                                .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                                    @Override
+                                                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                        materialDialog.dismiss();
+                                                                        new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                                .title("Information")
+                                                                                .content("Data Updated")
+                                                                                .positiveText("Ok")
+                                                                                .canceledOnTouchOutside(false)
+                                                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                                    @Override
+                                                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                        finish();
+                                                                                    }
+                                                                                }).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+
+                                    }
+                                });
+                            }else{
+                                    mainProduct.setDisplay_request_result("sold_out");
+                                databaseReference.child("sell_out")
+                                        .child(mainProduct.getStore_id())
+                                        .child(sell_out_date)
+                                        .child(mainProduct.getService_tag())
+                                        .setValue(mainProduct.getSold_by_promoter_id(), new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                databaseReference
+                                                        .child("msa")
+                                                        .child(mainProduct.getService_tag())
+                                                        .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                                            @Override
+                                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference1) {
+                                                                materialDialog.dismiss();
+                                                                new MaterialDialog.Builder(SetSellingDetailsActivity.this)
+                                                                        .title("Information")
+                                                                        .content("Data Updated")
+                                                                        .positiveText("Ok")
+                                                                        .canceledOnTouchOutside(false)
+                                                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                                            @Override
+                                                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                                finish();
+                                                                            }
+                                                                        }).show();
+                                                            }
+                                                        });
+
+                                            }
+                                        });
+
+                            }
+
+
                         }
                         else if (!is_sell_in_pressed && is_sell_out_pressed && can_sell_in_data_manipulated){
                             Toast.makeText(SetSellingDetailsActivity.this,"Can't Sell Out before Selling In",Toast.LENGTH_LONG).show();
@@ -276,13 +530,13 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        String temp_date = simpleDateFormat.format(calendar.getTime());
+        String temp_date = simpleDateFormat.format(calendar.getTime()).replace("-","");
         if (temp){
             date_sell_in_button.setText(myDateFormatter(temp_date));
             sell_in_date = temp_date;
             sell_in_date_set = true;
         } else {
-            sell_out_date = temp_date;
+            sell_out_date =temp_date;
             sell_out_date_set = true;
             date_sell_out_Button.setText(myDateFormatter(temp_date));
         }
@@ -299,9 +553,10 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
                 .show();
     }
 
+
     public String myDateFormatter(String date){
 
-        String a = date.substring(0,2) +"/" +date.substring(2,4) + "/"+ date.substring(4,8);
+        String a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
 
         return a;
     }

@@ -11,7 +11,7 @@
     android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:padding="3dp"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -24,7 +24,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:padding="3dp"
         android:textStyle="bold"
         android:textSize="17sp"
@@ -37,7 +37,7 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_margin="3dp"
         android:id="@+id/model_number_edit_text_add_user"
         android:hint="Enter Model Number"
@@ -45,27 +45,40 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:padding="3dp"
         android:id="@+id/bundle_code_edit_text_add_user"
         android:hint="Enter Bundle Code(optional)"
         android:layout_margin="3dp"
         />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="3dp"
+        android:id="@+id/configuration_edit_text_add_user"
+        android:hint="Enter Configuration"
+        android:layout_margin="3dp"
+        />
     <Button
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:text="Press to SET DATE"
         android:id="@+id/set_date_button_add_user"
         android:textSize="20sp"
+        android:background="@drawable/button_shape"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
     <Button
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_red_light"
         android:textSize="20sp"
         android:id="@+id/submit_button_add_user"
         android:text="SUBMIT"/>
+
 
 </LinearLayout>
 </ScrollView>

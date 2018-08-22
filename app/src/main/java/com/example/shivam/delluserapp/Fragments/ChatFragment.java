@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.DataModels.chat_model;
+import com.example.shivam.delluserapp.IssuesActivity;
 import com.example.shivam.delluserapp.R;
 import com.example.shivam.delluserapp.utils.StaticConstants;
 import com.example.shivam.delluserapp.utils.TinyDB;
@@ -35,6 +37,7 @@ public class ChatFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     StoreConfigModel s ;
+    MaterialDialog materialDialog;
     ChatAdapter chatAdapter;
     View view;
     Context context;
@@ -48,6 +51,12 @@ public class ChatFragment extends Fragment {
         chat_models = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
+        materialDialog = new MaterialDialog.Builder(context)
+                .title("Important Information")
+                .content("Please Wait")
+                .progress(true, 0)
+                .progressIndeterminateStyle(true).build();
+        materialDialog.show();
     }
 
     @Override
@@ -66,12 +75,13 @@ public class ChatFragment extends Fragment {
             chatAdapter = new ChatAdapter(chat_models, mListener,context);
             recyclerView.setAdapter(chatAdapter);
         }
+
         databaseReference.child("chat_room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null){
                     try {
-
+                        materialDialog.dismiss();
                         chat_model model = dataSnapshot.getValue(chat_model.class);
                         chat_models.add(model);
                         recyclerView.scrollToPosition(chat_models.size() - 1);
@@ -99,7 +109,11 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                new MaterialDialog.Builder(context)
+                        .title("INFORMATION")
+                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                        .positiveText("OK")
+                        .show();
             }
         });
         // Set the adapter

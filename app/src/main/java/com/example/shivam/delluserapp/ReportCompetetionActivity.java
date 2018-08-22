@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.CompModel;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.utils.StaticConstants;
 import com.example.shivam.delluserapp.utils.TinyDB;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,6 +28,7 @@ public class ReportCompetetionActivity extends AppCompatActivity {
     StoreConfigModel storeConfigModel;
     TinyDB tinyDB;
     SimpleDateFormat simpleDateFormat;
+    MaterialDialog materialDialog;
     DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class ReportCompetetionActivity extends AppCompatActivity {
         hp = (EditText)findViewById(R.id.hp);
         lenovo = (EditText)findViewById(R.id.lenovo);
         tinyDB = new TinyDB(ReportCompetetionActivity.this);
-        simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.US);
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         acer = (EditText)findViewById(R.id.acer);
         storeConfigModel = tinyDB.getObject(StaticConstants.config_object_key,StoreConfigModel.class);
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -61,9 +65,33 @@ public class ReportCompetetionActivity extends AppCompatActivity {
                     compModel.setStore_name(storeConfigModel.getStoreName());
                     compModel.setPromoter_id(storeConfigModel.getPromoter_id());
                     compModel.setPromoter_name(storeConfigModel.getPromoter_name());
-                    String date =  simpleDateFormat.format(new Date()).trim();
-                    databaseReference.child("comp_reporting").child(date).child(storeConfigModel.getUnique_store_id()).setValue(compModel);
-                    finish();
+                    String date =  simpleDateFormat.format(new Date()).replace("-","").trim();
+                    materialDialog = new MaterialDialog.Builder(ReportCompetetionActivity.this)
+                            .title("Please Wait..")
+                            .content("Uploading Data")
+                            .progress(true, 0)
+                            .show();
+                    databaseReference.child("comp_reporting").child(date).child(storeConfigModel.getUnique_store_id())
+                            .setValue(compModel, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    materialDialog.dismiss();
+                                    if (databaseError!=null){
+                                        new MaterialDialog.Builder(ReportCompetetionActivity.this)
+                                                .title("Information")
+                                                .content("Couldn't Update Database, Check Internet Connection and try again later..")
+                                                .positiveText("OK")
+                                                .show();
+
+                                        Toast.makeText(ReportCompetetionActivity.this,"Data could not be updated Successfully",Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        Toast.makeText(ReportCompetetionActivity.this,"Data Updated Successfully",Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
+                                }
+                            });
+
                 }
             }
         });

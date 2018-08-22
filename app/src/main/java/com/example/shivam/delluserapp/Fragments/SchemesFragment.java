@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.SchemeModel;
 import com.example.shivam.delluserapp.R;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,7 @@ public class SchemesFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     List<SchemeModel> schemeModels;
     Context context;
+    MaterialDialog materialDialog;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
@@ -41,7 +43,12 @@ public class SchemesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference  = firebaseDatabase.getReference();
-    }
+        materialDialog = new MaterialDialog.Builder(context)
+                .title("Important Information")
+                .content("Please Wait")
+                .progress(true, 0)
+                .progressIndeterminateStyle(true).build();
+         }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +56,7 @@ public class SchemesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_item_scheme_list, container, false);
         schemeModels = new ArrayList<>();
         // Set the adapter
+        materialDialog.show();
         databaseReference.child("schemes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -57,6 +65,15 @@ public class SchemesFragment extends Fragment {
                         SchemeModel schemeModel = ps.getValue(SchemeModel.class);
                         schemeModels.add(schemeModel);
                     }
+                }
+                materialDialog.dismiss();
+                if (schemeModels.size()==0){
+
+                    new MaterialDialog.Builder(context)
+                            .title("INFORMATION")
+                            .content("NO Schemes Found....")
+                            .positiveText("OK")
+                            .show();
                 }
                 if (view instanceof RecyclerView) {
                     Context context = view.getContext();
@@ -72,7 +89,11 @@ public class SchemesFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                new MaterialDialog.Builder(context)
+                        .title("INFORMATION")
+                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                        .positiveText("OK")
+                        .show();
             }
         });
 

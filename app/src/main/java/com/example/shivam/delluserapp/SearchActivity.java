@@ -70,7 +70,7 @@ public class SearchActivity extends AppCompatActivity{
                         for (DataSnapshot ds: dataSnapshot.getChildren()){
                             for (DataSnapshot ps : ds.getChildren()){
                                 for (DataSnapshot fs : ps.getChildren()){
-                                    if (query.equals(fs.getValue(String.class))){
+                                    if (fs.getValue(String.class).contains(query)){
                                         String key=fs.getKey();
                                         keys.add(key);
                                 }
@@ -85,7 +85,7 @@ public class SearchActivity extends AppCompatActivity{
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                  MainProduct mainProduct = dataSnapshot.getValue(MainProduct.class);
-                                 if (!mainProduct.isStore_sell_out_date_set()){
+                                 if (!mainProduct.isStore_sell_out_date_set() && mainProduct.getDisplay_request_result().equals("default")){
                                      mainProducts.add(mainProduct);
                                  }
                                  searchAdapter = new SearchResultAdapter(mainProducts,SearchActivity.this);

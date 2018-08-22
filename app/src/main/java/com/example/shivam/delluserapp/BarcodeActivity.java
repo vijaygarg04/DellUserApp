@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.MainProduct;
 import com.example.shivam.delluserapp.utils.TinyDB;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,7 @@ public class BarcodeActivity extends AppCompatActivity {
     TinyDB tinyDB;
     Button submit_button,scan_barcode;
     FirebaseDatabase firebaseDatabase;
+    MaterialDialog materialDialog;
     DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,11 @@ public class BarcodeActivity extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference();
         tinyDB = new TinyDB(BarcodeActivity.this);
         editText = (EditText)findViewById(R.id.input_service_text);
+        materialDialog = new MaterialDialog.Builder(BarcodeActivity.this)
+                .title("Loading Information")
+                .content("Please Wait")
+                .progress(true, 0)
+                .progressIndeterminateStyle(true).build();
         submit_button = (Button)findViewById(R.id.submit_button_barcode);
         scan_barcode = (Button)findViewById(R.id.barcode_scan_button);
 
@@ -51,6 +58,7 @@ public class BarcodeActivity extends AppCompatActivity {
             public void onClick(View view) {
               final String service_tag =  editText.getText().toString().trim();
                if (service_tag.length()>0){
+                   materialDialog.show();
                    //Check whether that tag is available in present product list, If yes, add in sell In or sell Out, If not, prompt the user to make it
                    databaseReference.child("msa").child(service_tag).addListenerForSingleValueEvent(new ValueEventListener() {
                        @Override
@@ -59,6 +67,7 @@ public class BarcodeActivity extends AppCompatActivity {
                               MainProduct mainProduct  = dataSnapshot.getValue(MainProduct.class);
                               Intent intent1 = new Intent(BarcodeActivity.this, SetSellingDetailsActivity.class);
                               tinyDB.putObject("selling_object",mainProduct);
+                              materialDialog.dismiss();
                               startActivity(intent1);
                               editText.setText("");
                               Toast.makeText(BarcodeActivity.this,"update DATA NOW",Toast.LENGTH_LONG).show();
@@ -69,13 +78,15 @@ public class BarcodeActivity extends AppCompatActivity {
                               Toast.makeText(BarcodeActivity.this,"Data doesn't exist in Database",Toast.LENGTH_LONG).show();
                               Intent intent1 = new Intent(BarcodeActivity.this,ConfirmationAddActivity.class);
                               intent1.putExtra("service_tag",service_tag);
+                              materialDialog.dismiss();
                               startActivity(intent1);
                           }
                        }
 
                        @Override
                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(BarcodeActivity.this,"DATA doesn't exist in firebase",Toast.LENGTH_LONG).show();
+                            Toast.makeText(BarcodeActivity.this,"DATABASE ERROR",Toast.LENGTH_LONG).show();
+                           materialDialog.dismiss();
                        }
                    });
 
@@ -90,6 +101,7 @@ public class BarcodeActivity extends AppCompatActivity {
                         == PackageManager.PERMISSION_GRANTED){
                     Intent intent = new Intent(BarcodeActivity.this,ScanActivity.class);
                     intent.putExtra("activity_name","barcode");
+
                     startActivity(intent);
                 }
                 else {

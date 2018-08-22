@@ -16,6 +16,7 @@ import com.example.shivam.delluserapp.DataModels.MainProduct;
 import com.example.shivam.delluserapp.DataModels.StoreConfigModel;
 import com.example.shivam.delluserapp.utils.StaticConstants;
 import com.example.shivam.delluserapp.utils.TinyDB;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tsongkha.spinnerdatepicker.DatePicker;
@@ -35,7 +36,7 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
     FirebaseDatabase firebaseDatabase;
     SimpleDateFormat simpleDateFormat;
     DatabaseReference databaseReference;
-    EditText model_number, bundle_code;
+    EditText model_number, bundle_code,configuration;
     MaterialDialog materialDialog;
     boolean is_date_set=  false;
     TinyDB tinyDB;
@@ -52,6 +53,7 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
         store_name_id = (TextView)findViewById(R.id.store_name_text_add_user);
         tinyDB = new TinyDB(AddProductAsUserActivity.this);
         mainProduct = new MainProduct();
+        configuration = (EditText)findViewById(R.id.configuration_edit_text_add_user);
         final String service_tag = intent.getStringExtra("service_tag");
         Log.e("Service_tag",service_tag);
         materialDialog = new MaterialDialog.Builder(AddProductAsUserActivity.this)
@@ -62,7 +64,7 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
 
         set_date = (Button)findViewById(R.id.set_date_button_add_user);
         submit_button = (Button)findViewById(R.id.submit_button_add_user);
-        simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.US);
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         service_tag_text = (TextView)findViewById(R.id.service_tag_text_add_user);
         final StoreConfigModel storeConfigModel= tinyDB.getObject(StaticConstants.config_object_key, StoreConfigModel.class);
         Log.e("Details :","ID; "+storeConfigModel.getUnique_store_id()+ " Name:"+storeConfigModel.getStoreName());
@@ -71,27 +73,70 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (is_date_set && model_number.getText().toString().trim().length()>0){
+                if (is_date_set && model_number.getText().toString().trim().length()>0 && configuration.getText().toString().trim().length()>0){
                     if (bundle_code.getText().toString().length()>0){
                         mainProduct.setBundle_code(bundle_code.getText().toString().trim());
                     }
                     mainProduct.setModel_number(model_number.getText().toString().trim());
                     mainProduct.setService_tag(service_tag);
+                    mainProduct.setConfiguration(configuration.getText().toString().trim());
                     mainProduct.setStore_id(storeConfigModel.getUnique_store_id());
                     mainProduct.setStore_name(storeConfigModel.getStoreName());
                     mainProduct.setStore_name_set(true);
                     mainProduct.setStore_sell_in_date(temp_date);
                     mainProduct.setStore_sell_in_date_set(true);
                     materialDialog.show();
-                    databaseReference.child("msa").child(service_tag).setValue(mainProduct);
-                    databaseReference.child("sell_in")
+
+
+
+
+                    databaseReference
+                            .child("sell_in")
                             .child(storeConfigModel.getUnique_store_id())
                             .child(temp_date)
                             .child(mainProduct.getService_tag())
-                            .setValue(mainProduct.getModel_number());
-                    materialDialog.dismiss();
-                    Toast.makeText(AddProductAsUserActivity.this,"Data Updated Successfully",Toast.LENGTH_LONG).show();
-                    finish();
+                            .setValue(mainProduct.getModel_number(), new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if (databaseError!=null){
+                                        new MaterialDialog.Builder(AddProductAsUserActivity.this)
+                                                .title("Information")
+                                                .content("Couldn't Update Database, Check Internet Connection and try again later..")
+                                                .positiveText("OK")
+                                                .show();
+                                        Toast.makeText(AddProductAsUserActivity.this,"",Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        Toast.makeText(AddProductAsUserActivity.this,"Sell In data Updated.",Toast.LENGTH_LONG).show();
+
+                                    }
+                                }
+                            });
+                    databaseReference
+                            .child("msa")
+                            .child(service_tag)
+                            .setValue(mainProduct, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    materialDialog.dismiss();
+                                    if (databaseError!=null){
+                                        new MaterialDialog.Builder(AddProductAsUserActivity.this)
+                                                .title("Information")
+                                                .content("Couldn't Update Database, Check Internet Connection and try again later..")
+                                                .positiveText("OK")
+                                                .show();
+                                        Toast.makeText(AddProductAsUserActivity.this,"Data Could Not Be Uploaded",Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        Toast.makeText(AddProductAsUserActivity.this,"MSA Data Updated Successfully",Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
+                                }
+                            });
+
+                }
+                else {
+                    Toast.makeText(AddProductAsUserActivity.this,"Enter all the fields..",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -118,9 +163,10 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
                 .show();
     }
 
+
     public String myDateFormatter(String date){
 
-        String a = date.substring(0,2) +"/" +date.substring(2,4) + "/"+ date.substring(4,8);
+        String a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
 
         return a;
     }
@@ -128,7 +174,7 @@ public class AddProductAsUserActivity extends AppCompatActivity implements DateP
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        temp_date = simpleDateFormat.format(calendar.getTime());
+        temp_date = simpleDateFormat.format(calendar.getTime()).replace("-","");
         set_date.setText(myDateFormatter(temp_date));
         is_date_set = true;
     }

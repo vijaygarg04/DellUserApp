@@ -54,6 +54,11 @@ public class ScanActivity extends AppCompatActivity {
                 MakeDisplayRequestActivity.editText.setText(result_code);
                 onBackPressed();
             }
+            else if (activity_name.equals("transfer")){
+                setContentView(R.layout.activity_transfer);
+                TransferActivity.edit_transfer.setText(result_code);
+                onBackPressed();
+            }
 
         }
     }

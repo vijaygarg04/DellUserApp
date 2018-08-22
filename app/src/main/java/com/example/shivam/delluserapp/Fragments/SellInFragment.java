@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class SellInFragment extends Fragment {
     StoreConfigModel storeConfigModel;
     Context context;
     List<String> service_tags_list;
+    String passed_date;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     View view;
@@ -54,7 +56,7 @@ public class SellInFragment extends Fragment {
          view = inflater.inflate(R.layout.fragment_item_sell_in_list, container, false);
         products = new ArrayList<>();
         service_tags_list = new ArrayList<>();
-       materialDialog = new MaterialDialog.Builder(context)
+        materialDialog = new MaterialDialog.Builder(context)
                 .title("Important Information")
                 .content("Please Wait")
                 .progress(true, 0)
@@ -75,12 +77,26 @@ public class SellInFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                if (dataSnapshot.exists()){
                    for (DataSnapshot ds: dataSnapshot.getChildren()){
-                       for (DataSnapshot post_snap : ds.getChildren()){
-                           String service_tag = post_snap.getKey();
-                           service_tags_list.add(service_tag);
-                          // Log.e("My Tag - 3 ",service_tag);
-                       }
+                       //Dates
 
+                       if (Integer.valueOf(passed_date) <= Integer.valueOf(ds.getKey())) {
+                           Log.e("My Test Tag : ", passed_date + "    " + ds.getKey());
+
+                           for (DataSnapshot post_snap : ds.getChildren()) {
+                               String service_tag = post_snap.getKey();
+                               service_tags_list.add(service_tag);
+
+                           }
+                       }
+                   }
+                   if (service_tags_list.size()==0){
+                       materialDialog.dismiss();
+                       new MaterialDialog.Builder(context)
+                               .title("INFORMATION")
+                               .content("NO MORE PRODUCTS WERE SELL IN AFTER " + myDateFormatter(passed_date))
+                               .positiveText("OK")
+                               .show();
+                       //Toast.makeText(context,"No Product Was Added After This Date",Toast.LENGTH_LONG).show();
                    }
                    for (String s : service_tags_list){
                        databaseReference.child("msa").child(s).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -103,14 +119,23 @@ public class SellInFragment extends Fragment {
 
                            @Override
                            public void onCancelled(DatabaseError databaseError) {
-
+                               new MaterialDialog.Builder(context)
+                                       .title("INFORMATION")
+                                       .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                                       .positiveText("OK")
+                                       .show();
                            }
                        });
 
                    }
                }else {
                    materialDialog.dismiss();
-                   Toast.makeText(context,"Data Not Found For This User",Toast.LENGTH_LONG).show();
+                   new MaterialDialog.Builder(context)
+                           .title("INFORMATION")
+                           .content("NO SELL IN DATA WAS FOUND FOR THIS USER")
+                           .positiveText("OK")
+                           .show();
+                   //Toast.makeText(context,"Data Not Found For This User",Toast.LENGTH_LONG).show();
                }
 
 
@@ -118,7 +143,11 @@ public class SellInFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                new MaterialDialog.Builder(context)
+                        .title("INFORMATION")
+                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                        .positiveText("OK")
+                        .show();
             }
         });
 
@@ -137,6 +166,7 @@ public class SellInFragment extends Fragment {
         }
         tinyDB = new TinyDB(context);
         this.context = context;
+        passed_date = tinyDB.getString("date_string");
     }
 
     @Override
@@ -144,7 +174,13 @@ public class SellInFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+    public String myDateFormatter(String date){
+        String a = date;
+        if (date.length()>5) {
+            a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
+        }
+        return a;
+    }
 
     public interface SellINListener {
         // TODO: Update argument type and name

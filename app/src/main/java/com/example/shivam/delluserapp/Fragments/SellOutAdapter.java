@@ -76,9 +76,13 @@ public class SellOutAdapter extends RecyclerView.Adapter<SellOutAdapter.ViewHold
         }
     }
     public String myDateFormatter(String date){
+        String a = date;
+        if (!date.equals("default")){
+              a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
 
-        String a = date.substring(0,2) +"/" +date.substring(2,4) + "/"+ date.substring(4,8);
+        }
 
         return a;
     }
+
 }

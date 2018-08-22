@@ -36,6 +36,7 @@ public class SellOutFragment extends Fragment {
     List<MainProduct> products;
     TinyDB tinyDB ;
     Context context;
+    String passed_date;
     StoreConfigModel storeConfigModel;
     List<String> service_tags_list;
     private SellOUTListener mListener;
@@ -76,14 +77,34 @@ public class SellOutFragment extends Fragment {
 
                 if (dataSnapshot.exists()){
                     for (DataSnapshot ds: dataSnapshot.getChildren()){
-                        for (DataSnapshot post_snap : ds.getChildren()){
+
+                        /*for (DataSnapshot post_snap : ds.getChildren()){
                             String service_tag = post_snap.getKey();
                             service_tags_list.add(service_tag);
                             Log.e("My Tag - 3 ",service_tag);
+                        }*/
+                        if (Integer.valueOf(passed_date) <= Integer.valueOf(ds.getKey())) {
+                            Log.e("My Test Tag : ", passed_date + "    " + ds.getKey());
+
+                            for (DataSnapshot post_snap : ds.getChildren()) {
+                                String service_tag = post_snap.getKey();
+                                service_tags_list.add(service_tag);
+
+                            }
                         }
+
 
                     }
 
+                    if (service_tags_list.size()==0){
+                        materialDialog.dismiss();
+                        new MaterialDialog.Builder(context)
+                                .title("INFORMATION")
+                                .content("NO MORE PRODUCTS WERE SOLD OUT AFTER " + myDateFormatter(passed_date))
+                                .positiveText("OK")
+                                .show();
+                        //Toast.makeText(context,"No Product Was Added After This Date",Toast.LENGTH_LONG).show();
+                    }
                     for (String s : service_tags_list){
                         databaseReference.child("msa").child(s).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -105,7 +126,11 @@ public class SellOutFragment extends Fragment {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-
+                                new MaterialDialog.Builder(context)
+                                        .title("INFORMATION")
+                                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                                        .positiveText("OK")
+                                        .show();
                             }
                         });
 
@@ -113,7 +138,11 @@ public class SellOutFragment extends Fragment {
                 }
                 else {
                     materialDialog.dismiss();
-                    Toast.makeText(context,"Data Not Found For This User",Toast.LENGTH_LONG).show();
+                    new MaterialDialog.Builder(context)
+                            .title("INFORMATION")
+                            .content("NO SELL OUT DATA WAS FOUND FOR THIS USER")
+                            .positiveText("OK")
+                            .show();
                 }
 
 
@@ -121,7 +150,11 @@ public class SellOutFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                new MaterialDialog.Builder(context)
+                        .title("INFORMATION")
+                        .content("DATABASE ERROR, TRY AGAIN LATER...This may occur due to slow or low network connectivity. Make sure you are in network range and try again ")
+                        .positiveText("OK")
+                        .show();
             }
         });
 
@@ -142,6 +175,7 @@ public class SellOutFragment extends Fragment {
         }
         this.context = context;
         tinyDB = new TinyDB(context);
+        passed_date = tinyDB.getString("date_string");
     }
 
     @Override
@@ -149,7 +183,13 @@ public class SellOutFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+    public String myDateFormatter(String date){
+        String a = date;
+        if (date.length()>5) {
+            a = date.substring(6,8) +"/" +date.substring(4,6) + "/"+ date.substring(0,4);
+        }
+        return a;
+    }
     public interface SellOUTListener {
         // TODO: Update argument type and name
         void sellOUTInteraction(MainProduct item);

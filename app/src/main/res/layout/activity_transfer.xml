@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="250dp"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:layout_gravity="center"
+    tools:context="com.example.shivam.delluserapp.TransferActivity">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/input_service_text_transfer"
+        android:hint="ENTER SERVICE TAG MANUALLY" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/holo_blue_light"
+        android:textSize="20sp"
+        android:id="@+id/submit_button_transfer"
+        android:textColor="@android:color/white"
+        android:text="SUBMIT"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="OR"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/scan_button_transfer"
+        android:layout_weight="1"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
+        android:textSize="20sp"
+        android:text="SCAN BARCODE"
+        />
+
+
+</LinearLayout>

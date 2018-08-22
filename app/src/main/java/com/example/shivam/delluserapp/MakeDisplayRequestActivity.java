@@ -80,6 +80,7 @@ public class MakeDisplayRequestActivity extends AppCompatActivity {
                             if (dataSnapshot.hasChild("service_tag")){
                                 MainProduct mainProduct  = dataSnapshot.getValue(MainProduct.class);
                                 if (!mainProduct.isDisplay_request()
+                                    && mainProduct.getDisplay_request_result().equals("default")
                                     && !mainProduct.isStore_sell_out_date_set()
                                     && mainProduct.isStore_sell_in_date_set()
                                     && mainProduct.getStore_id().equals(storeConfigModel.getUnique_store_id())){
@@ -93,7 +94,7 @@ public class MakeDisplayRequestActivity extends AppCompatActivity {
                                     dm.setRequest_status(true);
                                     dm.setRequest_result("pending");
                                     dm.setStore_name(storeConfigModel.getStoreName());
-                                    databaseReference.child("display_request").child(service_tag).setValue(dm);
+                                    databaseReference.child("display_request").child(storeConfigModel.getUnique_store_id()).child(service_tag).setValue(dm);
                                     databaseReference.child("msa").child(service_tag).setValue(mainProduct);
                                     Toast.makeText(MakeDisplayRequestActivity.this,"Value Successfully Updated",Toast.LENGTH_LONG).show();
                                     finish();
@@ -101,6 +102,12 @@ public class MakeDisplayRequestActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MakeDisplayRequestActivity.this,ShowInformationActivity.class);
                                     startActivity(intent);
                                 */}
+                                else
+                                    {
+                                    Toast.makeText(MakeDisplayRequestActivity.this,"This device cannot be requested",Toast.LENGTH_LONG).show();
+                                }
+
+
                                 editText.setText("");
                                  }
 

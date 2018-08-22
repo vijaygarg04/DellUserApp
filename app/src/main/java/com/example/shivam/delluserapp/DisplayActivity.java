@@ -73,6 +73,9 @@ public class DisplayActivity extends AppCompatActivity implements DisplayDevices
 
     @Override
     public void onListFragmentInteraction(DisplayModel item) {
+        Intent intent = new Intent(DisplayActivity.this,ShowInformationActivity.class);
+        intent.putExtra("service_tag",item.getService_tag());
+        startActivity(intent);
 
     }
 }

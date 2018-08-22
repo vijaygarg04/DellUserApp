@@ -4,11 +4,12 @@ import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shivam.delluserapp.DataModels.SchemeModel;
 import com.example.shivam.delluserapp.Fragments.SchemesFragment;
 
 public class ShowSchemeActivity extends AppCompatActivity implements SchemesFragment.OnListFragmentInteractionListener{
-
+MaterialDialog materialDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,10 @@ public class ShowSchemeActivity extends AppCompatActivity implements SchemesFrag
 
     @Override
     public void onListFragmentInteraction(SchemeModel item) {
-
+        new MaterialDialog.Builder(this)
+                .title(item.getTitle())
+                .content(item.getDescription())
+                .positiveText("OK")
+                .show();
     }
 }
