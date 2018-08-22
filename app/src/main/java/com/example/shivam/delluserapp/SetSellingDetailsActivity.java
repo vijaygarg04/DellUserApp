@@ -27,6 +27,8 @@ import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,7 +46,7 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
     SimpleDateFormat simpleDateFormat;
     public boolean sell_in_date_set = false,sell_out_date_set = false,can_sell_in_data_manipulated = true,can_sell_out_data_manipulated = true;
     public boolean is_sell_in_pressed = false,is_sell_out_pressed = false,temp = true;
-    TextView service_tag_text_view,msa_name_text_view,bundle_code_text_view,model_name_text_view;
+    TextView service_tag_text_view,msa_name_text_view,bundle_code_text_view,model_name_text_view,config_text_view,display_text_view,color_text_view;
     EditText store_name_edit_text,promoter_name_edit_text;
     StoreConfigModel storeConfigModel;
     //TODO : Consider the case when a barcode is scanned by two different stores.
@@ -52,6 +54,9 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_selling_details);
+        config_text_view = (TextView)findViewById(R.id.config_text_view_set_details);
+        display_text_view = (TextView)findViewById(R.id.display_text_view_set_details);
+        color_text_view = (TextView)findViewById(R.id.color_text_view_set_details);
         firebaseDatabase = FirebaseDatabase.getInstance();
         date_sell_in_button = (Button)findViewById(R.id.date_sell_in_button);
         submit_button = (Button)findViewById(R.id.submit_button);
@@ -73,6 +78,9 @@ public class SetSellingDetailsActivity extends AppCompatActivity implements Date
         model_name_text_view.append(mainProduct.getModel_number());
         msa_name_text_view.append(mainProduct.getMsa_name());
         service_tag_text_view.append(mainProduct.getService_tag());
+        config_text_view.append(mainProduct.getConfiguration());
+        display_text_view.append(mainProduct.getDisplay_request_result());
+        //color_text_view.append(mainProduct.getColor());
         date_sell_out_Button = (Button) findViewById(R.id.set_date_button);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         if(!mainProduct.isStore_sell_in_date_set() || mainProduct.getStore_name().equals(storeConfigModel.getStoreName())){
