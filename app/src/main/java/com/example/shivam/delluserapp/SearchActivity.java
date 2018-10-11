@@ -35,6 +35,9 @@ public class SearchActivity extends AppCompatActivity{
     LinearLayoutManager linearLayoutManager;
     List<MainProduct> mainProducts;
     MaterialDialog materialDialog;
+    
+    HashMap<String,ArrayList<MainProduct>> myhash=new HashMap<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +101,23 @@ public class SearchActivity extends AppCompatActivity{
                                 }
                             });
                         }
-
+                        
+                        for(MainProduct mainProduct:mainProducts){
+                        String storename=mainProduct.getStoreName();
+                            if(myhash.containsKey(storename)==false){
+                                myhash.put(storename,new ArrayList<MainProduct>);
+                            }
+                            Arraylist<MainProduct> myarrylist=myhash.get(storename);
+                            myarrlist.add(mainProduct);
+                        }
+                        mainProducts=new ArrayList<>();
+                        Arraylist<String> storekeys=new ArrayList<>(myhash.keyset());
+                        for(String storekey:storekeys){
+                        ArrayList<MainProduct> mp=myhash.get(storekey);
+                            if(mp.size()>=1){
+                                mainProducts.add(mp.get(0));
+                            }
+                        }
                         materialDialog.dismiss();
                     }
 
